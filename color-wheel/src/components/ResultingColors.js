@@ -1,14 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Typography, Button } from "@mui/material";
 
 const ResultingColors = ({ colors }) => {
   const [copiedIndex, setCopiedIndex] = useState(null);
+  const [colorNames, setColorNames] = useState();
 
   const copyToClipboard = (text, index) => {
     navigator.clipboard.writeText(text);
     setCopiedIndex(index);
 
-    // Reset the copiedIndex after a short delay to remove the animation
     setTimeout(() => {
       setCopiedIndex(null);
     }, 250);
@@ -18,6 +18,30 @@ const ResultingColors = ({ colors }) => {
     const paletteText = colors.join(", ");
     navigator.clipboard.writeText(paletteText);
   };
+
+  useEffect(() => {
+    const getColorNames = async () => {
+      try {
+        const response = await fetch(
+          `https://api.color.pizza/v1/?values=${colors
+            .toString()
+            .replaceAll("#", "")}`
+        );
+        if (!response.ok) {
+          throw new Error(
+            `Failed to fetch color names (status ${response.status})`
+          );
+        }
+
+        const data = await response.json();
+        setColorNames(data.colors);
+      } catch (error) {
+        console.error("Error fetching color names:", error.message);
+      }
+    };
+
+    getColorNames();
+  }, [colors]);
 
   return (
     <>
@@ -47,6 +71,12 @@ const ResultingColors = ({ colors }) => {
               backgroundColor: copiedIndex === index ? "#ccc" : "initial",
             }}
           >
+            <Typography
+              variant="body2"
+              sx={{ textAlign: "center", marginTop: "5px", color: "#ccc" }}
+            >
+              {colorNames[index]?.name}
+            </Typography>
             <Box
               sx={{
                 backgroundColor: color,
