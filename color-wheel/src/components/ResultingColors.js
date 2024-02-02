@@ -75,7 +75,7 @@ const ResultingColors = ({ colors }) => {
               variant="body2"
               sx={{ textAlign: "center", marginTop: "5px", color: "#ccc" }}
             >
-              {colorNames[index]?.name}
+              {colorNames ? colorNames[index]?.name : "Black"}
             </Typography>
             <Box
               sx={{
