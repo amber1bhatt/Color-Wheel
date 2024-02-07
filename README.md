@@ -2,6 +2,10 @@
 
 A web application for generating color palettes using a color wheel.
 
+## Website
+
+https://color-wheel-six.vercel.app/
+
 ## Table of Contents
 - [Overview](#overview)
 - [Demo Video](#demoVideo)
